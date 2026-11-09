@@ -1,0 +1,101 @@
+
+cart = []
+
+while True:
+    print("\n===== SHOPPING INVOICE SYSTEM =====")
+    print("1. Add Product")
+    print("2. View Shopping Cart")
+    print("3. Generate Final Invoice")
+    print("4. Clear Shopping Cart")
+    print("5. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        name = input("Enter product name: ")
+
+        try:
+            price = float(input("Enter price: Rs. "))
+            quantity = int(input("Enter quantity: "))
+
+            if price <= 0 or quantity <= 0:
+                print("Price and quantity must be positive.")
+            else:
+                product = {
+                    "name": name,
+                    "price": price,
+                    "quantity": quantity
+                }
+
+                cart.append(product)
+                print("Product added successfully.")
+
+        except ValueError:
+            print("Enter valid price and quantity.")
+
+    elif choice == "2":
+        if len(cart) == 0:
+            print("Shopping cart is empty.")
+        else:
+            print("\n===== SHOPPING CART =====")
+
+            for item in cart:
+                amount = item["price"] * item["quantity"]
+
+                print("\nProduct:", item["name"])
+                print("Price:", item["price"])
+                print("Quantity:", item["quantity"])
+                print("Amount:", round(amount, 2))
+
+    elif choice == "3":
+        if len(cart) == 0:
+            print("Shopping cart is empty.")
+        else:
+            subtotal = 0
+
+            print("\n========== FINAL INVOICE ==========")
+
+            for item in cart:
+                amount = item["price"] * item["quantity"]
+                subtotal += amount
+
+                print(
+                    item["name"],
+                    "x", item["quantity"],
+                    "=", round(amount, 2)
+                )
+
+            if subtotal >= 5000:
+                discount_rate = 10
+            elif subtotal >= 2000:
+                discount_rate = 5
+            else:
+                discount_rate = 0
+
+            discount = subtotal * discount_rate / 100
+            taxable_amount = subtotal - discount
+
+            # Sample GST rate: 5%
+            gst = taxable_amount * 5 / 100
+
+            final_amount = taxable_amount + gst
+
+            print("-----------------------------------")
+            print("Subtotal: Rs.", round(subtotal, 2))
+            print("Discount:", discount_rate, "%")
+            print("Discount Amount: Rs.", round(discount, 2))
+            print("GST (5%): Rs.", round(gst, 2))
+            print("-----------------------------------")
+            print("FINAL AMOUNT: Rs.", round(final_amount, 2))
+            print("===================================")
+
+    elif choice == "4":
+        cart.clear()
+        print("Shopping cart cleared.")
+
+    elif choice == "5":
+        print("Shopping system closed.")
+        break
+
+    else:
+        print("Invalid choice!")
